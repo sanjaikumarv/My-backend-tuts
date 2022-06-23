@@ -1,10 +1,24 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
+import mongooseSeq from "mongoose-sequence";
+const AutoIncrement = mongooseSeq(mongoose);
 
-const postsSchema = new Schema({
-  userId: Number,
-  Id: Number,
-  title: String,
-  body: String,
+const postSchema = new Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  id: Number,
+  title: {
+    type: String,
+    required: true,
+  },
+  body: {
+    type: String,
+    required: true,
+  },
 });
-export default model("Posts", postsSchema, "posts");
+
+postSchema.plugin(AutoIncrement, { inc_field: "id" });
+
+export default model("Posts", postSchema, "posts");
