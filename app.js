@@ -1,17 +1,11 @@
 import express from "express";
-import mongoose from "mongoose";
+import "./database";
 import User from "./models/user";
 import apiRoutes from "./routes/main.routes";
-import "dotenv/config";
 import { formatResponsive } from "./lib/formateResponsive";
+import { port } from "./env";
 const app = express();
-const port = process.env.APP_PORT;
 
-const connectionString = process.env.MONGO_DB_CONNECTION_STRING;
-mongoose.connect(connectionString);
-mongoose.connection.on("error", (err) => {
-  throw new Error("Mongo connection failed");
-});
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello World!");
