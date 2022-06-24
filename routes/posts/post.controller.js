@@ -12,12 +12,25 @@ function getPosts(req, res, next) {
     .catch(next);
 }
 
-function createPosts(req, res, next) {
+function getPost(req, res, next) {
+  const recordId = req.params.id;
+  Posts.findOne({ id: recordId })
+
+    .then((post) => {
+      if (!post) {
+        throw new Error(`no post found in the id ${recordId}`);
+      }
+      res.json(post);
+    })
+    .catch(next);
+}
+
+function createPost(req, res, next) {
   const { userId, title, body } = req.body;
   Posts.create({
     userId: userId,
-    title,
-    body,
+    title: title,
+    body: body,
   })
     .then((post) => {
       res.json(post);
@@ -25,4 +38,35 @@ function createPosts(req, res, next) {
     .catch(next);
 }
 
-export { getPosts, createPosts };
+async function updatePost(req, res, next) {
+  const recordId = req.params.id;
+  if (!recordId) throw new Error("Posts id not passed in url");
+
+  try {
+    const record = await Posts.findOne({ id: recordId });
+    if (!record) {
+      throw new Error(`Posts not found in the provided id ${recordId}`);
+    }
+    const { title, body } = req.body;
+    record.title = title;
+    record.body = body;
+    const updatedRecord = await record.save();
+    res.json(updatedRecord);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deletePost(req, res, next) {
+  const recordId = req.params.id;
+
+  try {
+    await Posts.deleteOne({ id: recordId });
+    res.json({
+      message: "Record deleted",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+export { getPosts, createPost, updatePost, getPost, deletePost };
