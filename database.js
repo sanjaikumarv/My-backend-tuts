@@ -3,7 +3,7 @@ import { connectionString } from "./env";
 
 mongoose.connect(connectionString);
 mongoose.connection.on("error", (err) => {
-  throw new Error("Mongo connection failed");
+  if (err) throw new Error("Mongo connection failed");
 });
 
 mongoose.set("debug", true);

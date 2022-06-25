@@ -18,7 +18,7 @@
     "mongoose-sequence": "^5.3.1"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "@faker-js/faker": "^7.3.0"
   }
 }
