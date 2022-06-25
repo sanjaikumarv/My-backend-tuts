@@ -1,5 +1,6 @@
 import { formatResponsive } from "../../lib/formateResponsive";
 import Posts from "../../models/posts";
+import Comments from "../../models/comments/comments.model";
 
 function getPosts(req, res, next) {
   const limit = Number(req.query.limit) || 0;
@@ -21,6 +22,15 @@ function getPost(req, res, next) {
         throw new Error(`no post found in the id ${recordId}`);
       }
       res.json(post);
+    })
+    .catch(next);
+}
+
+function getPostComments(req, res, next) {
+  const postId = req.params.id;
+  Comments.find({ postId })
+    .then((comments) => {
+      formatResponsive(res, comments, 200);
     })
     .catch(next);
 }
@@ -69,4 +79,11 @@ async function deletePost(req, res, next) {
     next(err);
   }
 }
-export { getPosts, createPost, updatePost, getPost, deletePost };
+export {
+  getPosts,
+  createPost,
+  updatePost,
+  getPost,
+  deletePost,
+  getPostComments,
+};
